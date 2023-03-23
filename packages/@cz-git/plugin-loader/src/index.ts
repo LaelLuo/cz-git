@@ -169,8 +169,8 @@ export const configLoader = async (options?: UserOptions) => {
     return { prompt: await execute(czData?.config || czData || {}, true) }
   }
   else {
-    return Promise.all([clLoader(options?.cwd), czLoader(options?.cwd), rootLoader()]).then(
-      ([clData, czData, rootData]) => {
+    return Promise.all([clLoader(options?.cwd), czLoader(options?.cwd), czLoader(os.homedir()), rootLoader()]).then(
+      ([clData, czData, rootCZData, rootData]) => {
         const clPrompt = clData.prompt || {}
         return {
           ...clData,
@@ -178,6 +178,7 @@ export const configLoader = async (options?: UserOptions) => {
             ...czData,
             ...clPrompt,
             ...rootData,
+            ...rootCZData,
           },
         }
       },
